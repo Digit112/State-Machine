@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>14</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>112</x>
+      <y>560</y>
+      <w>504</w>
+      <h>266</h>
+    </coordinates>
+    <panel_attributes>node
+--
+T get_data()
+set_data(T data)
+
+bool adjacent_to(node other)
+bool adjacent_from(node other)
+
+unsigned int in_degree()
+unsigned int out_degree()
+
+node::iterator&lt;edge&gt; begin()
+node::iterator&lt;edge&gt; end()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>378</x>
+      <y>154</y>
+      <w>504</w>
+      <h>266</h>
+    </coordinates>
+    <panel_attributes>graph&lt;T, U&gt;
+--
+node add_node(T data)
+edge add_edge(node first, node second, U data)
+
+unsigned int size()
+unsigned int num_nodes()
+unsigned int num_edges()
+
+graph::iterator&lt;node&gt; node_begin()
+graph::iterator&lt;node&gt; node_end()
+
+graph::iterator&lt;node&gt; edge_begin()
+graph::iterator&lt;node&gt; edge_end()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>350</x>
+      <y>406</y>
+      <w>294</w>
+      <h>182</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>190.0;10.0;190.0;60.0;10.0;60.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>644</x>
+      <y>560</y>
+      <w>504</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>edge
+--
+U get_data()
+set_data(U data)
+
+node get_start()
+set_start(node n)
+
+node get_end()
+set_end(node n)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>406</y>
+      <w>294</w>
+      <h>182</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;190.0;60.0;190.0;110.0</additional_attributes>
+  </element>
+</diagram>
