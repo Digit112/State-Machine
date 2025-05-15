@@ -7,7 +7,6 @@ class directed_graph {
 public:
 	class edge;
 	class node;
-	class node_iterator;
 	class edge_iterator;
 	
 	enum class Flags : unsigned int {
@@ -100,8 +99,20 @@ public:
 		// (whether it is the outgoing or incoming edges is an unspecified implementation detail)
 		std::vector<edge>::iterator eit;
 		
-		edge_iterator(directed_graph graph);
+		edge_iterator(directed_graph& graph);
 		
+		edge_iterator(const directed_graph& graph);
+		
+		// Implement relevant operations on iterators.
+		reference operator*();
+		pointer operator->();
+		edge_iterator& operator++();
+		edge_iterator& operator++(int);
+		edge_iterator& operator--();
+		edge_iterator& operator--(int);
+		
+		friend bool operator== (const edge_iterator& a, const edge_iterator& b);
+		friend bool operator!= (const edge_iterator& a, const edge_iterator& b);
 	};
 	
 private:
