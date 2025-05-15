@@ -71,15 +71,37 @@ public:
 		
 		void set_data(T data); ///< Sets the datum associated with this node.
 		T get_data(); ///< Retrieves the datum associated with this node.
+	
+		/// Returns an iterator to the nodes's first edge.
+		auto begin();
+
+		/// Returns an iterator to the nodes's last edge.
+		auto end();
+
+		/// Returns a const iterator to the nodes's first edge.
+		auto cbegin() const;
+
+		/// Returns a const iterator to the nodes's last edge.
+		auto cend() const;
 	};
 	
-	/// Represents an iterator over nodes.
-	class node_iterator {
+	/// Represents an iterator over edges.
+	class edge_iterator {
 		using iterator_category = std::bidirectional_iterator_tag;
 		using difference_type   = std::ptrdiff_t;
-		using value_type        = node;
-		using pointer           = value_type*;
-		using reference         = value_type&;
+		using value_type        = edge;
+		using pointer           = edge*;
+		using reference         = edge&;
+		
+		// Iterator over all the nodes in the graph.
+		std::vector<node>::iterator nit;
+		
+		// Iterator over some of the edges of the pointer-to node
+		// (whether it is the outgoing or incoming edges is an unspecified implementation detail)
+		std::vector<edge>::iterator eit;
+		
+		edge_iterator(directed_graph graph);
+		
 	};
 	
 private:
@@ -97,4 +119,16 @@ public:
 	/// If the edge already exists, simply assign the data and return the existing edge.
 	/// @return An edge connecting the first node to the second.
 	edge add_edge(node first, node second, U data);
+	
+	/// Returns an iterator to the graph's first node.
+	auto begin();
+	
+	/// Returns an iterator to the graph's last node.
+	auto end();
+	
+	/// Returns a const iterator to the graph's first node.
+	auto cbegin() const;
+	
+	/// Returns a const iterator to the graph's last node.
+	auto cend() const;
 };
