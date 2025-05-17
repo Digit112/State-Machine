@@ -2,8 +2,8 @@
 #include <memory>
 #include <utility>
 
-#ifndef directed_graph
-#define directed_graph
+#ifndef eko_directed_graph
+#define eko_directed_graph
 
 namespace eko {
 	template <class T, class U>
@@ -12,6 +12,9 @@ namespace eko {
 		class edge;
 		class node;
 		class edge_iterator;
+		
+		using node_h = unsigned int;
+		using edge_h = std::pair<node_h, unsigned int>;
 		
 		enum class Flags : unsigned int {
 			None = 0,
@@ -37,8 +40,8 @@ namespace eko {
 		private:
 			U data;
 			
-			node& start;
-			node& end;
+			node_h start;
+			node_h end;
 		
 		public:
 			edge(U data) : data(data) {}
@@ -46,16 +49,8 @@ namespace eko {
 			void set_data(U data); ///< Sets the datum associated with this edge.
 			U get_data(); ///< Retrieves the datum associated with this edge.
 			
-			node& get_start(); ///< Returns the node which this edge starts.
-			node& get_end(); ///< Returns the node which this edge ends.
-			
-			/// Sets the node at which this edge starts. 
-			/// Update's the existing node (if any) and the new node appropriately.
-			void set_start(node& n);
-			
-			/// Sets the node at which this edge ends. 
-			/// Update's the existing node (if any) and the new node appropriately.
-			void set_end(node& n);
+			node_h get_start(); ///< Returns the node which this edge starts at.
+			node_h get_end(); ///< Returns the node which this edge ends at.
 		};
 		
 		/// Represents a single vertex of a graph. Can be associated with a single element of data.
@@ -88,49 +83,9 @@ namespace eko {
 			auto cend() const;
 		};
 		
-		/// Represents an iterator over edges.
-		class edge_iterator {
-			using iterator_category = std::bidirectional_iterator_tag;
-			using difference_type   = std::ptrdiff_t;
-			using value_type        = edge;
-			using pointer           = edge*;
-			using reference         = edge&;
-			
-			// Iterator over all the nodes in the graph.
-			typename std::vector<node>::iterator nit;
-			
-			// Iterator over some of the edges of the pointer-to node
-			// (whether it is the outgoing or incoming edges is an unspecified implementation detail)
-			typename std::vector<edge>::iterator eit;
-			
-			edge_iterator(directed_graph& graph);
-			
-			edge_iterator(const directed_graph& graph);
-			
-			// Implement relevant operations on iterators.
-			reference operator*();
-			pointer operator->();
-			edge_iterator& operator++();
-			edge_iterator& operator++(int);
-			edge_iterator& operator--();
-			edge_iterator& operator--(int);
-			
-			template <class V, class W>
-			friend bool operator== (
-				const typename directed_graph<V, W>::edge_iterator& a,
-				const typename directed_graph<V, W>::edge_iterator& b
-			);
-			
-			template <class V, class W>
-			friend bool operator!= (
-				const typename directed_graph<V, W>::edge_iterator& a,
-				const typename directed_graph<V, W>::edge_iterator& b
-			);
-		};
-		
 	private:
 		std::vector<node> nodes;
-		unsigned int num_edges;
+		std::vector<edge> edges;
 
 	public:
 		Graph();
@@ -155,6 +110,18 @@ namespace eko {
 		
 		/// Returns a const iterator to the graph's last node.
 		auto cend() const;
+		
+		/// Returns an iterator to the graph's first edge.
+		auto ebegin();
+		
+		/// Returns an iterator to the graph's last edge.
+		auto eend();
+		
+		/// Returns a const iterator to the graph's first edge.
+		auto cebegin() const;
+		
+		/// Returns a const iterator to the graph's last edge.
+		auto ceend() const;
 	};
 } // eko
 
