@@ -44,6 +44,7 @@ namespace eko {
 			node_h end;
 		
 		public:
+			edge() : data() {}
 			edge(U data) : data(data) {}
 			
 			void set_data(U data); ///< Sets the datum associated with this edge.
@@ -88,7 +89,7 @@ namespace eko {
 		std::vector<edge> edges;
 
 	public:
-		Graph();
+		directed_graph() : nodes(), edges() {}
 		
 		/// Adds a node to the graph and assigns the given data to it.
 		/// @return The added node.

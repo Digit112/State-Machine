@@ -31,6 +31,29 @@ namespace eko {
 		return this->data;
 	}
 	
+	// 
+	
+	// Iterate over edges.
+	template <class T, class U>
+	auto directed_graph<T, U>::node::begin() {
+		return this->edges.begin();
+	}
+	
+	template <class T, class U>
+	auto directed_graph<T, U>::node::end() {
+		return this->edges.end();
+	}
+	
+	template <class T, class U>
+	auto directed_graph<T, U>::node::cbegin() const {
+		return this->edges.cbegin();
+	}
+	
+	template <class T, class U>
+	auto directed_graph<T, U>::node::cend() const {
+		return this->edges.cend();
+	}
+	
 	// -------- directed_graph::edge_iterator -------- //
 	// -------- directed_graph -------- //
 } // eko
