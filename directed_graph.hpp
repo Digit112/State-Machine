@@ -1,6 +1,7 @@
 #include <vector>
 #include <memory>
 #include <utility>
+#include <unordered_set>
 
 #ifndef eko_directed_graph
 #define eko_directed_graph
@@ -13,8 +14,8 @@ namespace eko {
 		class node;
 		class edge_iterator;
 		
-		using node_h = unsigned int;
-		using edge_h = std::pair<node_h, unsigned int>;
+		using node_h = const node&;
+		using edge_h = const edge&;
 		
 		enum class Flags : unsigned int {
 			None = 0,
@@ -32,7 +33,8 @@ namespace eko {
 			Null            = 1 << 11, ///< Describes a graph with no nodes. A Null graph is also empty.
 		};
 		
-		// Define a class which connects nodes together.
+		/// An immutable object representing a directed connection between two nodes.
+		/// Stores a datum of type specified in the enclosing class's template parameters.
 		class edge {
 			friend class directed_graph;
 			friend class node;
@@ -54,7 +56,8 @@ namespace eko {
 			node_h get_end(); ///< Returns the node which this edge ends at.
 		};
 		
-		/// Represents a single vertex of a graph. Can be associated with a single element of data.
+		/// An immutable entity representing a node or vertex in a graph.
+		/// Stores a datum of type specified in the enclosing class's template parameters.
 		class node {
 			friend class directed_graph;
 			friend class edge;
@@ -62,8 +65,8 @@ namespace eko {
 		private:
 			T data;
 			
-			std::vector<edge&> outgoing;
-			std::vector<edge&> incoming;
+			std::unordered_set<edge_h> outgoing;
+			std::unordered_set<edge_h> incoming;
 		
 		public:
 			node(T data) : data(data) {}
@@ -85,20 +88,20 @@ namespace eko {
 		};
 		
 	private:
-		std::vector<node> nodes;
-		std::vector<edge> edges;
+		std::unordered_set<node> nodes;
+		std::unordered_set<edge> edges;
 
 	public:
 		directed_graph() : nodes(), edges() {}
 		
 		/// Adds a node to the graph and assigns the given data to it.
-		/// @return The added node.
-		node add_node(T data);
+		/// @return The handle of the added node.
+		node_h add_node(T data);
 		
 		/// Adds an edge from the first node to the second and assigns the passed data to it.
 		/// If the edge already exists, simply assign the data and return the existing edge.
-		/// @return An edge connecting the first node to the second.
-		edge add_edge(node first, node second, U data);
+		/// @return The handle of an edge connecting the first node to the second.
+		edge_h add_edge(node first, node second, U data);
 		
 		/// Returns an iterator to the graph's first node.
 		auto begin();

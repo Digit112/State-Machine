@@ -31,8 +31,6 @@ namespace eko {
 		return this->data;
 	}
 	
-	// 
-	
 	// Iterate over edges.
 	template <class T, class U>
 	auto directed_graph<T, U>::node::begin() {
@@ -54,6 +52,12 @@ namespace eko {
 		return this->edges.cend();
 	}
 	
-	// -------- directed_graph::edge_iterator -------- //
 	// -------- directed_graph -------- //
+	template <class T, class U>
+	typename directed_graph<T, U>::node_h directed_graph<T, U>::add_node(T data) {
+		std::pair<bool, bool> res = nodes.insert(node(data));
+		
+		
+	}
+	
 } // eko
