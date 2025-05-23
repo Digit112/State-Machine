@@ -47,7 +47,15 @@ namespace eko {
 		
 		public:
 			edge() : data() {}
+			edge(const edge& other) : data(other.data), start(other.start), end(other.end) {}
 			edge(U data) : data(data) {}
+			
+			void operator=(const edge&);
+			bool operator==(const edge& a);
+			
+			struct hash_function {
+				size_t operator()(const edge& obj) const;
+			};
 			
 			void set_data(U data); ///< Sets the datum associated with this edge.
 			U get_data(); ///< Retrieves the datum associated with this edge.
@@ -65,11 +73,21 @@ namespace eko {
 		private:
 			T data;
 			
-			std::unordered_set<edge_h> outgoing;
-			std::unordered_set<edge_h> incoming;
+			std::unordered_set<edge_h, typename edge::hash_function> outgoing;
+			std::unordered_set<edge_h, typename edge::hash_function> incoming;
 		
 		public:
+			node() : data() {}
+			node(const node& other) : data(other.data), incoming(other.incoming), outgoing(other.outgoing) {}
+			node(node&& other) : data(other.data), incoming(other.incoming), outgoing(other.outgoing) {}
 			node(T data) : data(data) {}
+			
+			void operator=(const node&);
+			bool operator==(const node& a);
+			
+			struct hash_function {
+				size_t operator()(const node& obj) const;
+			};
 			
 			void set_data(T data); ///< Sets the datum associated with this node.
 			T get_data(); ///< Retrieves the datum associated with this node.
@@ -88,12 +106,10 @@ namespace eko {
 		};
 		
 	private:
-		std::unordered_set<node> nodes;
-		std::unordered_set<edge> edges;
+		std::unordered_set<node, typename node::hash_function> nodes;
+		std::unordered_set<edge, typename edge::hash_function> edges;
 
 	public:
-		directed_graph() : nodes(), edges() {}
-		
 		/// Adds a node to the graph and assigns the given data to it.
 		/// @return The handle of the added node.
 		node_h add_node(T data);

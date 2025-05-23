@@ -1,5 +1,12 @@
 namespace eko {
 	// -------- directed_graph::edge -------- //
+    template <class T, class U>
+	size_t directed_graph<T, U>::edge::hash_function::operator()(const eko::directed_graph<T, U>::edge& obj) const {
+		size_t h1 = std::hash<eko::directed_graph<T, U>::node>()(obj.get_start());
+		size_t h2 = std::hash<eko::directed_graph<T, U>::node>()(obj.get_end());
+		return h1 ^ h2;
+	}
+	
 	template <class T, class U>
 	void directed_graph<T, U>::edge::set_data(U data) {
 		this->data = data;
@@ -21,6 +28,11 @@ namespace eko {
 	}
 	
 	// -------- directed_graph::node -------- //
+    template <class T, class U>
+	size_t directed_graph<T, U>::node::hash_function::operator()(const directed_graph<T, U>::node& obj) const {
+		return std::hash<size_t>()(&obj);
+	}
+	
 	template <class T, class U>
 	void directed_graph<T, U>::node::set_data(T data) {
 		this->data = data;
@@ -56,8 +68,11 @@ namespace eko {
 	template <class T, class U>
 	typename directed_graph<T, U>::node_h directed_graph<T, U>::add_node(T data) {
 		std::pair<bool, bool> res = nodes.insert(node(data));
-		
-		
 	}
 	
 } // eko
+
+// Define the hash function
+namespace std {
+	
+}
