@@ -54,11 +54,21 @@ namespace eko {
 	
 	// -------- directed_graph -------- //
 	template <class T, class U>
+	typename directed_graph<T, U>::node directed_graph<T, U>::get_node(node_h h) const {
+		return nodes[h]; // TODO: Requires error checking mechanisms
+	}
+	
+	template <class T, class U>
+	typename directed_graph<T, U>::edge directed_graph<T, U>::get_edge(edge_h h) const {
+		return edges[h]; // TODO: Requires error checking mechanisms
+	}
+	
+	template <class T, class U>
 	typename directed_graph<T, U>::node_h directed_graph<T, U>::add_node(T data) {
 		directed_graph<T, U>::node new_node = node(data);
 		nodes.insert(new_node);
 		
-		return nodes.length();
+		return nodes.size();
 	}
 	
 	template <class T, class U>
@@ -68,7 +78,22 @@ namespace eko {
 		new_edge.end = second;
 		edges.insert(new_edge);
 		
-		return edges.length();
+		return edges.size();
+	}
+	
+	template <class T, class U>
+	bool directed_graph<T, U>::adjacent_to(node_h first, node_h second) {
+		return (bool) get_node(first).outgoing_edges.count(second);
+	}
+	
+	template <class T, class U>
+	bool directed_graph<T, U>::adjacent_from(node_h first, node_h second) {
+		return adjacent_to(second, first);
+	}
+	
+	template <class T, class U>
+	bool directed_graph<T, U>::adjacent(node_h first, node_h second) {
+		return adjacent_to(first, second) || adjacent_from(first, second);
 	}
 	
 	template <class T, class U>

@@ -7,6 +7,9 @@
 #define eko_directed_graph
 
 namespace eko {
+	/**
+	* The directed_graph represents a set of nodes and directed edges between them.
+	*/
 	template <class T, class U>
 	class directed_graph {
 	public:
@@ -95,6 +98,9 @@ namespace eko {
 	private:
 		std::vector<node> nodes;
 		std::vector<edge> edges;
+		
+		node get_node(node_h h) const;
+		edge get_edge(edge_h h) const;
 
 	public:
 		/// Adds a node to the graph and assigns the given data to it.
@@ -105,6 +111,16 @@ namespace eko {
 		/// If the edge already exists, simply assign the data and return the existing edge.
 		/// @return The handle of an edge connecting the first node to the second.
 		edge_h add_edge(node_h first, node_h second, U data);
+			
+		/// Determines whether an edge from the first node to the second node exists.
+		bool adjacent_to(node_h first, node_h second);
+		
+		/// Determines whether an edge from the second node to the first node exists.
+		/// The same as adjacent_to(second, first)
+		bool adjacent_from(node_h first, node_h second);
+		
+		/// Determines whether an edge connects the passed nodes, regardless of the edge's direction.
+		bool adjacent(node_h first, node_h second);
 		
 		/// Returns an iterator to the graph's first node.
 		auto begin();
