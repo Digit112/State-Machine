@@ -48,14 +48,8 @@ namespace eko {
 		public:
 			edge() : data() {}
 			edge(const edge& other) : data(other.data), start(other.start), end(other.end) {}
+			edge(edge&& other) : data(other.data), start(other.start), end(other.end) {}
 			edge(U data) : data(data) {}
-			
-			void operator=(const edge&);
-			bool operator==(const edge& a);
-			
-			struct hash_function {
-				size_t operator()(const edge& obj) const;
-			};
 			
 			void set_data(U data); ///< Sets the datum associated with this edge.
 			U get_data(); ///< Retrieves the datum associated with this edge.
@@ -82,13 +76,6 @@ namespace eko {
 			node(node&& other) : data(other.data), incoming(other.incoming), outgoing(other.outgoing) {}
 			node(T data) : data(data) {}
 			
-			void operator=(const node&);
-			bool operator==(const node& a);
-			
-			struct hash_function {
-				size_t operator()(const node& obj) const;
-			};
-			
 			void set_data(T data); ///< Sets the datum associated with this node.
 			T get_data(); ///< Retrieves the datum associated with this node.
 		
@@ -106,8 +93,8 @@ namespace eko {
 		};
 		
 	private:
-		std::unordered_set<node, typename node::hash_function> nodes;
-		std::unordered_set<edge, typename edge::hash_function> edges;
+		std::vector<node> nodes;
+		std::vector<edge> edges;
 
 	public:
 		/// Adds a node to the graph and assigns the given data to it.
@@ -117,7 +104,7 @@ namespace eko {
 		/// Adds an edge from the first node to the second and assigns the passed data to it.
 		/// If the edge already exists, simply assign the data and return the existing edge.
 		/// @return The handle of an edge connecting the first node to the second.
-		edge_h add_edge(node first, node second, U data);
+		edge_h add_edge(node_h first, node_h second, U data);
 		
 		/// Returns an iterator to the graph's first node.
 		auto begin();
@@ -132,16 +119,16 @@ namespace eko {
 		auto cend() const;
 		
 		/// Returns an iterator to the graph's first edge.
-		auto ebegin();
+		auto edge_begin();
 		
 		/// Returns an iterator to the graph's last edge.
-		auto eend();
+		auto edge_end();
 		
 		/// Returns a const iterator to the graph's first edge.
-		auto cebegin() const;
+		auto cedge_begin() const;
 		
 		/// Returns a const iterator to the graph's last edge.
-		auto ceend() const;
+		auto cedge_end() const;
 	};
 } // eko
 

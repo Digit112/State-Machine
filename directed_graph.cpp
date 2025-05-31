@@ -1,12 +1,5 @@
 namespace eko {
 	// -------- directed_graph::edge -------- //
-    template <class T, class U>
-	size_t directed_graph<T, U>::edge::hash_function::operator()(const eko::directed_graph<T, U>::edge& obj) const {
-		size_t h1 = std::hash<eko::directed_graph<T, U>::node>()(obj.get_start());
-		size_t h2 = std::hash<eko::directed_graph<T, U>::node>()(obj.get_end());
-		return h1 ^ h2;
-	}
-	
 	template <class T, class U>
 	void directed_graph<T, U>::edge::set_data(U data) {
 		this->data = data;
@@ -28,11 +21,6 @@ namespace eko {
 	}
 	
 	// -------- directed_graph::node -------- //
-    template <class T, class U>
-	size_t directed_graph<T, U>::node::hash_function::operator()(const directed_graph<T, U>::node& obj) const {
-		return std::hash<size_t>()(&obj);
-	}
-	
 	template <class T, class U>
 	void directed_graph<T, U>::node::set_data(T data) {
 		this->data = data;
@@ -67,12 +55,59 @@ namespace eko {
 	// -------- directed_graph -------- //
 	template <class T, class U>
 	typename directed_graph<T, U>::node_h directed_graph<T, U>::add_node(T data) {
-		nodes.insert(node(data));
+		directed_graph<T, U>::node new_node = node(data);
+		nodes.insert(new_node);
+		
+		return nodes.length();
 	}
 	
-} // eko
-
-// Define the hash function
-namespace std {
+	template <class T, class U>
+	typename directed_graph<T, U>::edge_h directed_graph<T, U>::add_edge(node_h first, node_h second, U data) {
+		directed_graph<T, U>::edge new_edge = edge(data);
+		new_edge.start = first;
+		new_edge.end = second;
+		edges.insert(new_edge);
+		
+		return edges.length();
+	}
 	
-}
+	template <class T, class U>
+	auto directed_graph<T, U>::begin() {
+		return nodes.begin();
+	}
+	
+	template <class T, class U>
+	auto directed_graph<T, U>::end() {
+		return nodes.end();
+	}
+	
+	template <class T, class U>
+	auto directed_graph<T, U>::cbegin() const {
+		return nodes.cbegin();
+	}
+	
+	template <class T, class U>
+	auto directed_graph<T, U>::cend() const {
+		return nodes.cend();
+	}
+	
+	template <class T, class U>
+	auto directed_graph<T, U>::edge_begin() {
+		return edges.begin();
+	}
+	
+	template <class T, class U>
+	auto directed_graph<T, U>::edge_end() {
+		return edges.end();
+	}
+	
+	template <class T, class U>
+	auto directed_graph<T, U>::cedge_begin() const {
+		return edges.cbegin();
+	}
+	
+	template <class T, class U>
+	auto directed_graph<T, U>::cedge_end() const {
+		return edges.cend();
+	}
+} // eko
