@@ -14,8 +14,8 @@ namespace eko {
 		class node;
 		class edge_iterator;
 		
-		using node_h = const unsigned int;
-		using edge_h = const unsigned int;
+		using node_h = unsigned int;
+		using edge_h = unsigned int;
 		
 		enum class Flags : unsigned int {
 			None = 0,
@@ -73,8 +73,8 @@ namespace eko {
 		private:
 			T data;
 			
-			//std::unordered_set<edge_h> outgoing;
-			//std::unordered_set<edge_h> incoming;
+			std::unordered_set<edge_h> outgoing;
+			std::unordered_set<edge_h> incoming;
 		
 		public:
 			node() : data() {}
@@ -106,8 +106,8 @@ namespace eko {
 		};
 		
 	private:
-		//std::unordered_set<node, typename node::hash_function> nodes;
-		//std::unordered_set<edge, typename edge::hash_function> edges;
+		std::unordered_set<node, typename node::hash_function> nodes;
+		std::unordered_set<edge, typename edge::hash_function> edges;
 
 	public:
 		/// Adds a node to the graph and assigns the given data to it.

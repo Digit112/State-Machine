@@ -67,7 +67,7 @@ namespace eko {
 	// -------- directed_graph -------- //
 	template <class T, class U>
 	typename directed_graph<T, U>::node_h directed_graph<T, U>::add_node(T data) {
-		std::pair<bool, bool> res = nodes.insert(node(data));
+		nodes.insert(node(data));
 	}
 	
 } // eko
