@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 namespace eko {
 	// -------- directed_graph::edge -------- //
 	template <class T, class U>
@@ -54,36 +56,55 @@ namespace eko {
 	
 	// -------- directed_graph -------- //
 	template <class T, class U>
-	typename directed_graph<T, U>::node directed_graph<T, U>::get_node(node_h h) const {
-		return nodes[h]; // TODO: Requires error checking mechanisms
+	typename directed_graph<T, U>::node& directed_graph<T, U>::get_node(node_h h) {
+		if (h >= nodes.size()) throw std::out_of_range("Invalid node handle.");
+		return nodes[h];
 	}
 	
 	template <class T, class U>
-	typename directed_graph<T, U>::edge directed_graph<T, U>::get_edge(edge_h h) const {
-		return edges[h]; // TODO: Requires error checking mechanisms
+	typename directed_graph<T, U>::edge& directed_graph<T, U>::get_edge(edge_h h) {
+		if (h >= edges.size()) throw std::out_of_range("Invalid edge handle.");
+		return edges[h];
 	}
 	
 	template <class T, class U>
 	typename directed_graph<T, U>::node_h directed_graph<T, U>::add_node(T data) {
 		directed_graph<T, U>::node new_node = node(data);
-		nodes.insert(new_node);
+		nodes.push_back(new_node);
 		
-		return nodes.size();
+		return nodes.size() - 1;
 	}
 	
+	// TODO: May leave the graph in an invalid state if get_node() throws.
 	template <class T, class U>
 	typename directed_graph<T, U>::edge_h directed_graph<T, U>::add_edge(node_h first, node_h second, U data) {
 		directed_graph<T, U>::edge new_edge = edge(data);
 		new_edge.start = first;
 		new_edge.end = second;
-		edges.insert(new_edge);
 		
-		return edges.size();
+		// Add handle to the nodes composing the edge.
+		edge_h handle = edges.size();
+		
+		auto& outgoing = get_node(first).outgoing;
+		auto& incoming = get_node(second).incoming;
+		
+		std::pair res1 = outgoing.insert(handle);
+		std::pair res2 = incoming.insert(handle);
+		
+		// Add edge
+		edges.push_back(new_edge);
+		
+		return handle;
 	}
 	
 	template <class T, class U>
 	bool directed_graph<T, U>::adjacent_to(node_h first, node_h second) {
-		return (bool) get_node(first).outgoing_edges.count(second);
+		auto& outgoing = get_node(first).outgoing;
+		for (auto it = outgoing.begin(); it != outgoing.end(); ++it) {
+			if (get_edge(*it).end == second) return true;
+		}
+		
+		return false;
 	}
 	
 	template <class T, class U>

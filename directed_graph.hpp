@@ -95,12 +95,12 @@ namespace eko {
 			auto cend() const;
 		};
 		
-	private:
+	public: //private: TODO: Uncomment.
 		std::vector<node> nodes;
 		std::vector<edge> edges;
 		
-		node get_node(node_h h) const;
-		edge get_edge(edge_h h) const;
+		node& get_node(node_h h);
+		edge& get_edge(edge_h h);
 
 	public:
 		/// Adds a node to the graph and assigns the given data to it.
